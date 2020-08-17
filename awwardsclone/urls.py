@@ -15,8 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from clone import views as clone_views
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^awwards/', include('awwards.urls'))
+    url(r'', include('awwards.urls')),
+    url(r'register/',clone_views.register, name='register'), 
+    url(r'login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'), 
+    url(r'logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'), 
+    url(r'^ratings/', include('star_ratings.urls', namespace='ratings')),
+    url(r'^api-token-auth/', obtain_auth_token)
+      
+    
 ]

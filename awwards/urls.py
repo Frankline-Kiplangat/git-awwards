@@ -17,5 +17,5 @@ urlpatterns=[
     url(r'api/projects/project-id/(?P<pk>[0-9]+)/$',
         views.ProjectsDescription.as_view()),     
 ]
-if settings.Debug:
-    urlpatterns+= static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+# if settings.Debug:
+#     urlpatterns+= static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
