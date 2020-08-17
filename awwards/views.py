@@ -41,9 +41,21 @@ def upload_form(request):
 
 @login_required(login_url='login')
 def project(request, project_id):
+    """
+    Function that returns project details
+    """
     try:
         project = Projects.objects.get(id=project_id)
     except Projects.DoesNotExist:
         raise Http404()
     return render(request, "project.html", {'project':project})
+
+@login_required(login_url='login')
+def index(request):
+    """
+    view function renders the landing page
+    """
+    current_user = request.user
+    all_projects = Projects.objects.all()
+    return render(request, 'index.html', {'all_projects':all_projects})
 
