@@ -6,6 +6,13 @@ from django.http import HttpResponse, Http404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm,UploadForm
+from django.contrib.auth.decorators import login_required
+from .models import Profile,Projects,Events
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import EventsSerializer,ProfileSerializer,ProjectsSerializer
+from rest_framework import status
+from .permissions import IsAdminOrReadOnly
 
 # Create your views here.
 
