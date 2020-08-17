@@ -24,6 +24,22 @@ def search_results(request):
         return render(request, 'search.html',{"message":message})
 
 @login_required(login_url='login')
+def upload_form(request):
+    current_user = request.user.profile
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.uploaded_by = current_user
+            image.save()
+            messages.success(request, f'You have uploaded the project!')
+            return redirect('index')
+    else:
+        form = UploadForm()
+    return render(request, 'post_project.html', {'uploadform': form})
+
+
+@login_required(login_url='login')
 def project(request, project_id):
     try:
         project = Projects.objects.get(id=project_id)
