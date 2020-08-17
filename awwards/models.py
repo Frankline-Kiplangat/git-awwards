@@ -86,3 +86,22 @@ class Projects(models.Model):
                 fields = fields.union(deferred_fields)
         super().refresh_from_db(using, fields, **kwargs)
 
+    @classmethod
+    def get_projects(cls,project_search):
+        project = cls.objects.filter(project_name__icontains=project_search)
+        return project
+
+    @property
+    def project_image_url(self):
+        if self.project_image and hasattr(self.project_image, 'url'):
+            return self.project_image.url
+
+    class Meta:
+        ordering = ["-pk"]
+
+
+    def delete_projects(self):
+        """
+        method deletes entered projects to the database
+        """
+        self.delete()
