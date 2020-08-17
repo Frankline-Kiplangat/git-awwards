@@ -64,3 +64,25 @@ class Projects(models.Model):
     url = models.CharField(max_length=50, blank=True)
     project_user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+
+    def __str__(self):
+        return self.project_name
+
+    def save_projects(self):
+        """
+        method saves entered projects to the database
+        """
+        save()
+
+    def update_projects(self, using=None, fields=None, **kwargs):
+        """
+        method updates saved projects
+        """
+        if fields is not None:
+            fields = set(fields)
+            deferred_fields = self.get_deferred_fields()
+            if fields.intersection(deferred_fields):
+                fields = fields.union(deferred_fields)
+        super().refresh_from_db(using, fields, **kwargs)
+
