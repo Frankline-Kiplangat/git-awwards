@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
+import datetime as dt
 
 # Create your models here.
 class Profile(models.Model):
@@ -105,3 +107,11 @@ class Projects(models.Model):
         method deletes entered projects to the database
         """
         self.delete()
+class Events(models.Model):
+    event = models.CharField(max_length=100, blank=True)
+    description = models.TextField()
+    price = models.DecimalField(decimal_places=2, max_digits=20)
+
+
+    def __str__(self):
+        return self.event
