@@ -22,3 +22,11 @@ def search_results(request):
     else:
         message = "You haven't searched for any user or projects"
         return render(request, 'search.html',{"message":message})
+
+@login_required(login_url='login')
+def project(request, project_id):
+    try:
+        project = Projects.objects.get(id=project_id)
+    except Projects.DoesNotExist:
+        raise Http404()
+    return render(request, "project.html", {'project':project})
