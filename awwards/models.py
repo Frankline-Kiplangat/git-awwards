@@ -12,3 +12,15 @@ class Profile(models.Model):
     profile_pic = models.ImageField( default = 'default.jpg',upload_to='profilepics/')
     bio = models.TextField(max_length=80, blank=True)
     contact = models.CharField(max_length =200,blank=True)
+
+    def __str__(self):
+        """
+        function returns informal representations of the models' objects
+        """
+        return f'{self.user.username} Profile'
+
+    def save_profile(self):
+        """
+        method saves entered profiles to the database
+        """
+        save()
