@@ -46,3 +46,8 @@ class Profile(models.Model):
                 fields = fields.union(deferred_fields)
         super().refresh_from_db(using, fields, **kwargs)
 
+    def delete_profile(self):
+        """
+        method deletes entered profiles to the database
+        """
+        self.delete()
