@@ -128,3 +128,17 @@ class ProfileDescription(APIView):
         prof = self.get_profile(pk)
         prof.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ProjectsList(APIView):
+    def get(self, request, formart=None):
+        all_projects = Projects.objects.all()
+        serializers = ProjectsSerializer(all_projects, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, formart=None):
+        serializers = ProjectsSerializer(data=request.data)
+        permission_classes = (IsAdminOrReadOnly,)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
