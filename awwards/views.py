@@ -204,3 +204,17 @@ class EventDescription(APIView):
         event = self.get_event(pk)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class EventList(APIView):
+    def get(self, request, formart=None):
+        all_events = Events.objects.all()
+        serializers = EventsSerializer(all_events, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, formart=None):
+        serializers = EventsSerializer(data=request.data)
+        permission_classes = (IsAdminOrReadOnly,)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
