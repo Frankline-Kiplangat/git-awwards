@@ -77,7 +77,7 @@ def index(request):
 @login_required(login_url='login')
 def profile(request):
     """
-    view function that renders user's profile
+    view function that renders user's profile info
     """
     current_user = request.user
     if request.method == 'POST':
@@ -99,4 +99,32 @@ def profile(request):
         'p_form': p_form,
         'my_projects':my_projects    
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'profile/profile.html', context)
+
+
+class ProfileDescription(APIView):
+    permission_classes = (IsAdminOrReadOnly,)
+    def get_profile(self,pk):
+        try:
+            return Profile.objects.get(pk=pk)
+        except Profile.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        prof = self.get_profile(pk)
+        serializers = ProfileSerializer(prof)
+        return Response(serializers.data)
+
+    def put(self, request, pk, format=None):
+        prof = self.get_profile(pk)
+        serializers = ProfileSerializer(prof, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        prof = self.get_profile(pk)
+        prof.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
