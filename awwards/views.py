@@ -30,3 +30,4 @@ def project(request, project_id):
     except Projects.DoesNotExist:
         raise Http404()
     return render(request, "project.html", {'project':project})
+
