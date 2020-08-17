@@ -48,6 +48,19 @@ class Profile(models.Model):
 
     def delete_profile(self):
         """
-        method deletes entered profiles to the database
+        method deletes entered user profiles to the database
         """
         self.delete()
+
+
+class Projects(models.Model):
+    """
+    class containing projects' description
+    """
+    project_name = models.CharField(max_length=50, blank=True)
+    project_image = models.ImageField(blank=True, upload_to='projectimages/')
+    description = models.TextField(max_length=300, blank=True)
+    github_repo = models.CharField(max_length=150, blank=True)
+    url = models.CharField(max_length=50, blank=True)
+    project_user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
