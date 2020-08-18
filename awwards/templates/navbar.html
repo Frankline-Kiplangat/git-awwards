@@ -1,7 +1,4 @@
-
-{% load static%}
-
-    <nav class="navbar navbar-expand-lg aqua-gradient content sticky-top">
+<nav class="navbar navbar-expand-lg bg-info" id="navMain">
 
       <div class="award">
             <a class="nav-link text-dark" href="{% url 'home'%}">
@@ -20,28 +17,27 @@
           {% if user.is_authenticated %}
           <div class="btn btn-light btn-sm ml-5">
             <li class="nav-item dropdown ml-2 text-light">
-              <a class="nav-link dropdown-toggle text-light" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              <a class="nav-link dropdown-toggle-primary" id="navbarDropdownMenuLink" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"><h5>Account</h5></a>
-              <div class="dropdown-menu dropdown-primary text-dark" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
               </div>
             </li>
           </div>
-          <div class=" mt-2 btn btn-dark btn-sm ml-2">
-            <li class="nav-item ml-2 ">
+          <div class="btn btn-">
+            <li>
               <a class="nav-link text-light" href="{% url 'newproject' %}"><h5>SUBMIT PROJECT</h5></a>
             </li>
           </div>
           {% else %}
-          <div class="btn btn-dark btn-sm">
+          <div>
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'login' %}"><h5>Login</h5></a>
+              <a class="nav-link text-black" href="{% url 'login' %}"><h5>Login</h5></a>
             </li>
           </div>
-          <div class="btn btn-dark btn-sm">
+          <div>
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'register' %}"><h5>Register</h5></a>
+              <a class="nav-link text-black" href="{% url 'register' %}"><h5>Register</h5></a>
               
             </li>
           </div>
@@ -49,12 +45,10 @@
         </ul>
 
       <ul class="navbar-nav">
-        <div class="btn btn-dark -sm">
-          <form class="form-inline" action="{% url 'search' %}">
-            <div class="md-form my-0">
-              <input class="form-control mr-sm-2 text-white" type="text" placeholder="Search" aria-label="Search" name="post">
-            </div>
-          </form>
+            <div class="text-center">
+            <form class="form-inline my-2 my-lg-0" role="search" action="{% url 'search' %}">
+            <input style="text-align: center;"  class="form-control" name="username" type="search" placeholder="Search... " aria-label="Search">
+            </form>
         </div>
       </ul>
       </div>

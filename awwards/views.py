@@ -8,12 +8,14 @@ from rest_framework.views import APIView
 from .serializer import *
 
 
+@login_required(login_url='/accounts/login/')
 def home(request):
     projects = Projects.objects.all()
     context = {
-        "projects":projects,
+    "projects":projects,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'index.html', locals())
+
 
 def registration(request):
     if request.method == 'POST':
@@ -29,7 +31,7 @@ def registration(request):
     }
     return render(request, 'registration/register.html', context)
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def updateprofile(request):
     projects = Projects.objects.all()
     posts = Profile.objects.all()
@@ -52,10 +54,10 @@ def updateprofile(request):
     'projects':projects,
     }
 
-    return render(request, 'profile/edit_rofile.html', context)
+    return render(request, 'profile/edit_profile.html', context)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def profile(request):
     projects = Projects.objects.all()
     posts = Profile.objects.all()
@@ -80,7 +82,7 @@ def profile(request):
     return render(request, 'profile/profile.html', context)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def postproject(request):
     current_user = request.user
     if request.method == 'POST':

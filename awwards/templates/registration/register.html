@@ -19,17 +19,19 @@
         </div>
         <div class="panel-body">
 
-          <form  action="/accounts/register/" method="post">
+          <form   method="post">
             {% csrf_token %}
             {% bootstrap_form form %}
             <div class="form-group">
-              <input type="submit" class="btn btn-primary btn-sm" value="Sign Up">
+              <input type="submit" class="btn btn-primary btn-lg" value="SignUp">
             </div>
 
             <input type="hidden" name="newprofile" value="newprofile">
 
           </form>
-
+              <div class="border-bottom pt-3">
+                <p class="text-muted">Already have an account?<a class="ml-2 text-info" href="{% url 'login' %}">SignIn</a></p>
+              </div>
         </div>
 
       </div>

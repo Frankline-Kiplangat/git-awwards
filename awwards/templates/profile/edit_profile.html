@@ -1,6 +1,5 @@
 {% extends 'base.html'%}
-{% load crispy_forms_tags %}
-
+{% load bootstrap4 %}
 
 {% block content %}
   <div class="container content pt-5">
@@ -14,9 +13,8 @@
                 {% csrf_token %}
                 <div class="form-group">
                   <legend class="border-bottom mb-4 text-center text-black mt-5">Update Account</legend>
-                  {{user_form|crispy}}
-                  {{profile_form|crispy}}
-
+            {% bootstrap_form user_form %}
+            {% bootstrap_form profile_form %}
                 </div>
                 <div class="form-group">
                   <input type="submit" class="btn btn-outline-info w-100 pl-2 pr-2"  value="Update">
