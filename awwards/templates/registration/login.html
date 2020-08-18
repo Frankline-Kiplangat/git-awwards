@@ -4,15 +4,15 @@
 {% block content %}
 <div class="container "><br><br>
     <div class="row sign-up">
-    <img src="/static/images/img2.jpg" width="500" height="400" >
+    <img src="/static/images/img2.jpg" width="500" height="500" >
     <div class="col-md-2">
-    </div>
+  </div>
         <div class="col-md-4">
             {% if form.errors %}
             <p class="small">Password or Username is incorrect</p>
             {% endif %}
             <div class="section">
-                <h1 style='color:#8a3ab9'>Awwards Clone</h1>
+                <h1 style='color:#8a3ab9'><b>Awwards Clone<b/></h1>
                 <div class="form-section">
                     <form action="/accounts/login/" method="POST">
                         {% csrf_token %}
@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="section">
-                <p>Don't have an account? <a href="/accounts/register">Sign-Up</a></p>
+                <p>Don't have an account? <a href="{% url 'register' %}">Sign-Up Here</a> <p><a href="">Terms and Conditions</a></p>
             </div>
         </div>
           <div class="col-md-6">

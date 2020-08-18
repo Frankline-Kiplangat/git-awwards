@@ -1,233 +1,137 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
-from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm,UploadForm
 from django.contrib.auth.decorators import login_required
-from .models import Profile,Projects,Events
+from django.contrib import messages
+from .forms import *
+from .models import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializer import EventsSerializer,ProfileSerializer,ProjectsSerializer
-from rest_framework import status
-from .permissions import IsAdminOrReadOnly
+from .serializer import *
 
-# Create your views here.
 
-def register(request):
+def home(request):
+    projects = Projects.objects.all()
+    context = {
+        "projects":projects,
+    }
+    return render(request, 'index.html', context)
+
+def registration(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Your account has been created! You are now able to login!')
-            return redirect('login')
+            form.save()
+            return redirect('/login')
     else:
-        form = UserRegisterForm()
-    return render(request, 'registration/register.html', {'form':form})
+        form = RegisterForm()
+    context = {
+        'form':form,
+    }
+    return render(request, 'registration/register.html', context)
 
-
-
-def search_results(request):
-    """
-    view function that returns the searched projects
-    """
-    if 'projects' in request.GET and request.GET["projects"]:
-        project_search = request.GET.get("projects")
-        searched_projects = Projects.get_projects(project_search)
-        message = f"{project_search}"
-
-        return render(request, 'search.html',{"message":message,"projects": searched_projects})
-
-    else:
-        message = "You haven't searched for any user or projects"
-        return render(request, 'search.html',{"message":message})
-
-@login_required(login_url='login')
-def upload_form(request):
-    current_user = request.user.profile
+@login_required
+def updateprofile(request):
+    projects = Projects.objects.all()
+    posts = Profile.objects.all()
     if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.uploaded_by = current_user
-            image.save()
-            messages.success(request, f'You have uploaded the project!')
-            return redirect('index')
-    else:
-        form = UploadForm()
-    return render(request, 'post_project.html', {'uploadform': form})
-
-
-@login_required(login_url='login')
-def project(request, project_id):
-    """
-    Function that returns project details
-    """
-    try:
-        project = Projects.objects.get(id=project_id)
-    except Projects.DoesNotExist:
-        raise Http404()
-    return render(request, "project.html", {'project':project})
-
-@login_required(login_url='login')
-def index(request):
-    """
-    view function renders the landing page
-    """
-    current_user = request.user
-    all_projects = Projects.objects.all()
-    return render(request, 'index.html', {'all_projects':all_projects})
-
-@login_required(login_url='login')
-def profile(request):
-    """
-    view function that renders user's profile info
-    """
-    current_user = request.user
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST,instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save() 
-            messages.success(request, f'Your account has been updated!')
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, f'Your account has been successfully updated')
             return redirect('profile')
     else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-        my_projects = Projects.objects.filter(project_user=current_user)
-        
-    
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {
-        'u_form': u_form,
-        'p_form': p_form,
-        'my_projects':my_projects    
+    'user_form':user_form,
+    'profile_form':profile_form,
+    'posts':posts,
+    'projects':projects,
     }
-    return render(request, 'profile.html', context)
+
+    return render(request, 'profile/edit_rofile.html', context)
 
 
-class ProfileDescription(APIView):
-    permission_classes = (IsAdminOrReadOnly,)
-    def get_profile(self,pk):
-        try:
-            return Profile.objects.get(pk=pk)
-        except Profile.DoesNotExist:
-            return Http404
+@login_required
+def profile(request):
+    projects = Projects.objects.all()
+    posts = Profile.objects.all()
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, f'Your account has been successfully updated')
+            return redirect('profile')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    def get(self, request, pk, format=None):
-        prof = self.get_profile(pk)
-        serializers = ProfileSerializer(prof)
+    context = {
+    'user_form':user_form,
+    'profile_form':profile_form,
+    'posts':posts,
+    'projects':projects,
+    }
+    return render(request, 'profile/profile.html', context)
+
+
+@login_required
+def postproject(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.author = current_user
+            project.save()
+        return redirect('/')
+    else:
+        form = ProjectForm()
+    context = {
+        'form':form,
+    }
+    return render(request, 'post_project.html', context)
+
+def get_project(request, id):
+    project = Projects.objects.get(pk=id)
+
+    return render(request, 'project.html', {'project':project})
+
+
+def search_projects(request):
+    if 'post' in request.GET and request.GET['post']:
+        search_term = request.GET["post"]
+        searched_projects = Projects.search_projects(search_term)
+        message = f'search_term'
+        context = {
+            "projects":searched_projects,
+            "message":message,
+
+        }
+        return render(request, 'search.html', context)
+    else:
+        message = "You haven't searched for any user"
+        context = {
+            "message":message,
+        }
+        return render(request, 'search.html', context)
+
+
+
+class ProjectList(APIView):
+    def get(self, request, format=None):
+        allprojects = Projects.objects.all()
+        serializers = ProjectSerializer(allprojects, many=True)
         return Response(serializers.data)
 
-    def put(self, request, pk, format=None):
-        prof = self.get_profile(pk)
-        serializers = ProfileSerializer(prof, request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data)
-        else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
-        prof = self.get_profile(pk)
-        prof.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class ProjectsList(APIView):
-    def get(self, request, formart=None):
-        all_projects = Projects.objects.all()
-        serializers = ProjectsSerializer(all_projects, many=True)
-        return Response(serializers.data)
-
-    def post(self, request, formart=None):
-        serializers = ProjectsSerializer(data=request.data)
-        permission_classes = (IsAdminOrReadOnly,)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ProjectsDescription(APIView):
-    permission_classes = (IsAdminOrReadOnly,)
-    def get_projects(self,pk):
-        try:
-            return Projects.objects.get(pk=pk)
-        except Projects.DoesNotExist:
-            return Http404
-
-    def get(self, request, pk, format=None):
-        project = self.get_projects(pk)
-        serializers = ProjectsSerializer(project)
-        return Response(serializers.data)
-
-    def put(self, request, pk, format=None):
-        project = self.get_projects(pk)
-        serializers = ProjectsSerializer(project, request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data)
-        else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        project = self.get_projects(pk)
-        project.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-
-class EventDescription(APIView):
-    permission_classes = (IsAdminOrReadOnly,)
-    def get_event(self,pk):
-        try:
-            return Events.objects.get(pk=pk)
-        except Events.DoesNotExist:
-            return Http404
-
-    def get(self, request, pk, format=None):
-        event = self.get_event(pk)
-        serializers = EventsSerializer(event)
-        return Response(serializers.data)
-
-    def put(self, request, pk, format=None):
-        event = self.get_event(pk)
-        serializers = EventsSerializer(event, request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data)
-        else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        event = self.get_event(pk)
-        event.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class EventList(APIView):
-    def get(self, request, formart=None):
-        all_events = Events.objects.all()
-        serializers = EventsSerializer(all_events, many=True)
-        return Response(serializers.data)
-
-    def post(self, request, formart=None):
-        serializers = EventsSerializer(data=request.data)
-        permission_classes = (IsAdminOrReadOnly,)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 class ProfileList(APIView):
-    def get(self, request, formart=None):
-        all_profiles = Profile.objects.all()
-        serializers = ProfileSerializer(all_profiles, many=True)
+    def get(self, request, format=None):
+        allprofiles = Profile.objects.all()
+        serializers = ProfileSerializer(allprofiles, many=True)
         return Response(serializers.data)
-
-    def post(self, request, formart=None):
-        serializers = ProfileSerializer(data=request.data)
-        permission_classes = (IsAdminOrReadOnly,)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)

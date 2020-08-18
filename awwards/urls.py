@@ -1,21 +1,27 @@
-from django.conf.urls import url
+from django.urls import path, re_path, include
 from . import views
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
-urlpatterns=[
-    url(r'^$',views.index,name = 'index'),
-    url(r'profile/', views.profile, name='profile'),
-    url(r'^search/', views.search_results, name='search_results'),
-    url(r'^project/(?P<project_id>.*)/$',views.project,name ='project'),
-    url(r'^post/', views.upload_form, name='post'),
-    url(r'^api/events/$', views.EventList.as_view()),
-    url(r'api/events/event-id/(?P<pk>[0-9]+)/$',
-        views.EventDescription.as_view()),
-    url(r'^api/profiles/$', views.ProfileList.as_view()),
-    url(r'api/profiles/profile-id/(?P<pk>[0-9]+)/$',
-        views.ProfileDescription.as_view()),
-    url(r'^api/projects/$', views.ProjectsList.as_view()),
-    url(r'api/projects/project-id/(?P<pk>[0-9]+)/$',
-        views.ProjectsDescription.as_view()),     
+urlpatterns = [
+    path('',views.home,name='home'),
+    path('register/', views.registration, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
+    path('profile/', views.profile, name='profile'),
+    path('updateprofile/', views.updateprofile, name='updateprofile'),
+    path('new-project/', views.postproject, name='newproject'),
+    path('project/<id>', views.get_project, name='project'),
+    path('search', views.search_projects, name='search'),
+    path('api/projects', views.ProjectList.as_view()),
+    path('api/profiles', views.ProfileList.as_view()),
+    re_path(r'^ratings/', include('star_ratings.urls', namespace='ratings')),
+
+
+
+
+
 ]
-# if settings.Debug:
-#     urlpatterns+= static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
