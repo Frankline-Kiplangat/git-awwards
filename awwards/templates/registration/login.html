@@ -1,31 +1,35 @@
-{%extends "base.html"%}
+{% extends 'base.html' %}
 {% load bootstrap4 %}
-{% block content %}
-<div class="container">
 
-    {% if form.errors %}
-    <p> Password or Username is incorrect </p>
-    {% endif %}
-    <div class="content-section">
-        <div class="panel-body">
-            <form method="POST">
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Log In</legend>
-                    {% bootstrap_form form %}
-                </fieldset>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-outline-info btn-sm" value="Login">
+{% block content %}
+<div class="container "><br><br>
+    <div class="row sign-up">
+    <img src="/static/images/img2.jpg" width="500" height="400" >
+    <div class="col-md-2">
+    </div>
+        <div class="col-md-4">
+            {% if form.errors %}
+            <p class="small">Password or Username is incorrect</p>
+            {% endif %}
+            <div class="section">
+                <h1 style='color:#8a3ab9'>Awwards Clone</h1>
+                <div class="form-section">
+                    <form action="/accounts/login/" method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary btn-lg" value="Sign In">
+                        </div>
+                        <input type="hidden" name="next" value="{{next}}">
+                    </form>
                 </div>
-                <input type="hidden" name="next" value="{{next}}">
-            </form>
-            <div class="border-top pt-3">
-                <small class="text-muted">Don't have an account? <a class="ml-2" href="{% url 'register'%}">Sign Up
-                        Now</a></small>
+            </div>
+            <div class="section">
+                <p>Don't have an account? <a href="/accounts/register">Sign-Up</a></p>
             </div>
         </div>
+          <div class="col-md-6">
+        </div>
     </div>
-
 </div>
-
 {% endblock %}

@@ -106,7 +106,7 @@ def profile(request):
         'p_form': p_form,
         'my_projects':my_projects    
     }
-    return render(request, 'profile/profile.html', context)
+    return render(request, 'profile.html', context)
 
 
 class ProfileDescription(APIView):
