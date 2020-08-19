@@ -99,29 +99,24 @@ def postproject(request):
     }
     return render(request, 'post_project.html', context)
 
+@login_required(login_url='/accounts/login/')
 def get_project(request, id):
     project = Projects.objects.get(pk=id)
 
     return render(request, 'project.html', {'project':project})
 
-
+@login_required(login_url='/accounts/login/')
 def search_projects(request):
-    if 'post' in request.GET and request.GET['post']:
-        search_term = request.GET["post"]
+    if 'project' in request.GET and request.GET['project']:
+        search_term = request.GET["project"]
         searched_projects = Projects.search_projects(search_term)
-        message = f'search_term'
-        context = {
-            "projects":searched_projects,
-            "message":message,
-
-        }
-        return render(request, 'search.html', context)
+        message = f"{search_term}"
+        
+        return render(request, 'search.html', {"message":message, "projects": searched_projects})
     else:
         message = "You haven't searched for any user"
-        context = {
-            "message":message,
-        }
-        return render(request, 'search.html', context)
+
+        return render(request, 'search.html', {"message":message})
 
 
 
