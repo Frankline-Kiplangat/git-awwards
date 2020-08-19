@@ -17,7 +17,7 @@ Users can do the following with the app:
 * Rate/ review other users' projects
 * Search for projects 
 * View projects overall score
-* View my profile page
+* View  profile page
 
 ## Setup/Installation Requirements
 * internet access
