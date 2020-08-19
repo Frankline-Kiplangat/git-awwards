@@ -1,35 +1,36 @@
-<nav class="navbar navbar-expand-lg bg-info" id="navMain">
+<!--Navbar -->
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark bg-info">
+  <a class="navbar-brand" href="#"><b>Awwards Clone</b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+    aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  {% if user.is_authenticated %}
+  <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home'%}">Home
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
 
-      <div class="award">
-            <a class="nav-link text-dark" href="{% url 'home'%}">
-              <h1><strong>Awwards Clone</strong></h1>
-              <span class="sr-only">(current)</span>
-            </a>
-      </div>
-      <button class="navbar-toggler bg-info text-white" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-        aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-      </button>
-
-      <div class="collapse navbar-collapse" id="basicExampleNav">
-
-        <ul class="navbar-nav mr-auto text-white">
-          {% if user.is_authenticated %}
-          <div class="btn btn-light btn-sm ml-5">
-            <li class="nav-item dropdown ml-2 text-light">
-              <a class="nav-link dropdown-toggle-primary" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false"><h5>Account</h5></a>
-                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-              </div>
-            </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">Account
+        </a>
+        <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
+          <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+            <div>
+            
+              <a class="navbar-brand" href="{% url 'newproject' %}">Submit Project</a>
+            
           </div>
-          <div class="btn btn-">
-            <li>
-              <a class="nav-link text-light" href="{% url 'newproject' %}"><h5>SUBMIT PROJECT</h5></a>
-            </li>
-          </div>
-          {% else %}
+
+        {% else %}
           <div>
             <li class="nav-item">
               <a class="nav-link text-black" href="{% url 'login' %}"><h5>Login</h5></a>
@@ -51,6 +52,6 @@
             </form>
         </div>
       </ul>
-      </div>
-
-    </nav>
+  </div>
+</nav>
+<!--/.Navbar -->

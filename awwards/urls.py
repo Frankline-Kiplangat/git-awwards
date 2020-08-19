@@ -16,7 +16,7 @@ urlpatterns = [
     path('search', views.search_projects, name='search'),
     path('api/projects', views.ProjectList.as_view()),
     path('api/profiles', views.ProfileList.as_view()),
-    re_path(r'^ratings/', include('star_ratings.urls', namespace='ratings')),
+    path(r'ratings/', include('star_ratings.urls', namespace='ratings')),
 
 
 
