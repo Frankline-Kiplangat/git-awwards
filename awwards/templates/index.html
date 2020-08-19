@@ -27,14 +27,13 @@
 
                     <div class="card">
                     <div class="view overlay zoom">
-                        <a href="/project/{{project_item.id}}">
-                        <img class="card-img-top" src="{{project_item.image.url}}" alt="{{ project_item.project_name }}" height="200px">
+                        <img class="card-img-top" src="{{project_item.image.url}}" alt="{{ project_item.project_name }}" width="200px" height="200px">
                         </a>
                       </div>
 
-                      <div class="card-body pr-2 pl-2 pr-2 mr-2">
-                        <h4 class="card-title ml-4"> {{ project_item.title }}</h4>
-                        <a  class="btn btn-outline-info" href="https://frankline-kiplangat.github.io/Delani-studio/" target="_blank">View Project</a>
+                      <div class="card-body">
+                        <h4 class="card-title"> {{ project_item.title }}</h4>
+                        <a  class="btn btn-outline-info" href="/project/{{project_item.id}}">More details</a>
                       </div>
                       <div class="card-footer">
                         <span class="dark-text ml-3 mt-2"><img src="{{ project_item.author.profile.image.url }}" alt=""  style="width: 50px; border-radius: 50%;">
