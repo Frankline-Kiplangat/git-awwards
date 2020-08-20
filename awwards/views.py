@@ -23,7 +23,7 @@ def registration(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             form.save()
-            return redirect('/login')
+            return redirect('login')
     else:
         form = RegisterForm()
     context = {
