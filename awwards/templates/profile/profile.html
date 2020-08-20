@@ -17,25 +17,8 @@
                 <p class="ml-3">Bio: {{user.profile.bio}}</p>
                 <a class="btn btn-info" href="{% url 'updateprofile' %}">Update Profile</a>
 
-          </div>
-        </div>
 
-        <div>
-              <div class="col-md-4">
-
-              <div class="row">
-              <div class="col-md-4 text-center">
-                <h2 class="text-info text-uppercase">Projects</h2>
-                <hr>
-              </div>
-              {% for project in projects %}
-                  {% if project.author == user %}
-                    <div class="col-md-4">
-                      <img class="w-100 mt-3 " src="{{project.image.url}}" alt="image">
-                    </div>
-                    </div>
-                  {% endif %}
-              {% endfor %}
+      
           </div>
       </div>
     {% endblock %}

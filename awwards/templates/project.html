@@ -6,7 +6,7 @@
       <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4">
-                  <div class="profile-image">
+                  <div class="profile-img">
                     <img class="profile-image" src="{{ project.author.profile.image.url }}" alt="img" height="200px" style="border-radius: 50%;">
                   </div>
                   <div class="project-author">
@@ -20,10 +20,10 @@
                 <div class="col-md-4">
                   <h1 class="ml-3">Poject Title</h1>
                   <hr>
-                  <h3 class="mt-5 ml-5" style="font-weight: bold;"><i>{{project.title}}</i></h3><br>
+                  <p class="mt-5 ml-5">{{project.title}}<p><br>
                   <h1 class="ml-3">Project Description</h1>
                   <hr>
-                  <h4 class="mt-2"> {{project.description}}</h4>
+                  <p class="mt-2"> {{project.description}}</p>
                   <hr>
                   <h5 class="text-info">Posted On: {{project.created_date}}</h5>
 
